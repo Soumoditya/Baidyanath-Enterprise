@@ -12,11 +12,11 @@ interface ProductFormProps {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  healthcare: "Healthcare",
-  cleaning: "Cleaning",
+  "health-drinks": "Health Drinks & Nutrition",
+  otc: "OTC & Healthcare",
+  cleaning: "Cleaning & Disinfectants",
+  household: "Household Essentials",
   food: "Food & Beverages",
-  otc: "OTC Medicine",
-  household: "Household",
 };
 
 export default function ProductForm({ product, onSaved }: ProductFormProps) {

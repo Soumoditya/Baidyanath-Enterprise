@@ -3,6 +3,8 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Locale } from "@/i18n/config";
+import WhatsAppFab from "@/components/shared/whatsapp-fab";
+import BackToTop from "@/components/shared/back-to-top";
 
 export default async function LocaleLayout({
   children,
@@ -23,6 +25,8 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <div className={`locale-${locale} flex flex-col min-h-screen`}>
         {children}
+        <WhatsAppFab />
+        <BackToTop />
       </div>
     </NextIntlClientProvider>
   );

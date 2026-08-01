@@ -91,12 +91,24 @@ export default function ContactPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={0.35}>
-            <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white p-4 bg-white dark:bg-slate-800">
-                {t("find_us")}
-              </h2>
+            <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700">
+              <div className="flex items-center justify-between gap-3 bg-white p-4 dark:bg-slate-800">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                  {t("find_us")}
+                </h2>
+                <a
+                  href="https://maps.app.goo.gl/v7EjXBj8dW6ZPPud8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M9 20l-5.5 2.5v-15L9 5m0 15 6-2.5M9 20V5m6 12.5L20.5 20v-15L15 7.5m0 10v-10m0 0L9 5" /></svg>
+                  {t("directions")}
+                </a>
+              </div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.5!2d87.7833!3d24.1733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDEwJzI0LjAiTiA4N8KwNDcnMDAuMCJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                title="Baidyanath Enterprise location"
+                src="https://maps.google.com/maps?q=Baidyanath%20Enterprise%2C%20Chaldhoani%20Para%2C%20Rampurhat%2C%20Birbhum%2C%20West%20Bengal%20731224&z=15&output=embed"
                 width="100%"
                 height="350"
                 style={{ border: 0 }}

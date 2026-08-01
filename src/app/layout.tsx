@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Bengali, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -23,12 +23,82 @@ const notoDevanagari = Noto_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://baidyanath-enterprise.vercel.app"),
   title: {
     default: "Baidyanath Enterprise - Trusted FMCG Distributor in Rampurhat",
     template: "%s | Baidyanath Enterprise",
   },
   description:
     "Trusted Distributor of FMCG, Healthcare & Cleaning Products in Rampurhat, Birbhum, West Bengal. Complan, Sugar Free, Glucon-D, OTC Products, Phenyl, and more at competitive prices.",
+  keywords: [
+    "Baidyanath Enterprise",
+    "FMCG distributor Rampurhat",
+    "Complan",
+    "Glucon-D",
+    "Sugar Free",
+    "wholesale FMCG Birbhum",
+    "cleaning products distributor",
+  ],
+  manifest: "/manifest.webmanifest",
+  applicationName: "Baidyanath Enterprise",
+  appleWebApp: {
+    capable: true,
+    title: "Baidyanath Enterprise",
+    statusBarStyle: "default",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: "/icon.svg",
+  },
+  openGraph: {
+    title: "Baidyanath Enterprise — Trusted FMCG Distributor in Rampurhat",
+    description:
+      "Genuine FMCG, Healthcare & Cleaning products at competitive prices. Order online or on WhatsApp.",
+    type: "website",
+    locale: "en_IN",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+};
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  name: "Baidyanath Enterprise",
+  description:
+    "Trusted Distributor of FMCG, Healthcare & Cleaning Products in Rampurhat, Birbhum, West Bengal.",
+  image: "https://baidyanath-enterprise.vercel.app/icon.svg",
+  url: "https://baidyanath-enterprise.vercel.app",
+  telephone: "+91-9932132957",
+  email: "baidya.ent@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress:
+      "Opposite Dinabandhu Club, Chaldhoani Para, 11 no Ward, Rampurhat - I",
+    addressLocality: "Rampurhat",
+    addressRegion: "West Bengal",
+    postalCode: "731224",
+    addressCountry: "IN",
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
+    opens: "09:00",
+    closes: "18:00",
+  },
+  priceRange: "₹₹",
 };
 
 export default function RootLayout({
@@ -58,6 +128,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessJsonLd),
+          }}
+        />
         {children}
       </body>
     </html>

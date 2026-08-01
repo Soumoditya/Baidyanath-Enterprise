@@ -10,33 +10,52 @@
     "logout": "Logout",
     "orders": "My Orders"
   },
+  "topbar": {
+    "tagline": "Genuine FMCG, Healthcare & Cleaning Products",
+    "hours": "Mon–Sat 9 AM–6 PM · Sun Closed"
+  },
   "home": {
-    "hero_title": "Your Trusted FMCG Distributor",
-    "hero_subtitle": "Quality healthcare, food & cleaning products at competitive prices in Rampurhat",
-    "browse_products": "Browse Products",
-    "contact_us": "Contact Us",
-    "featured": "Featured Products",
-    "featured_subtitle": "Handpicked products with the best quality and prices",
-    "categories": "Shop by Category",
-    "categories_subtitle": "Browse our wide range of products",
+    "hero_eyebrow": "Rampurhat's Trusted FMCG Distributor",
+    "hero_title": "Genuine Products, Delivered On Time",
+    "hero_subtitle": "Baidyanath Enterprise supplies healthcare, nutrition, cleaning and household products to shops and families across Birbhum — at honest, competitive prices.",
+    "hero_browse": "Browse Products",
+    "hero_whatsapp": "Order on WhatsApp",
+    "trust_genuine": "100% Genuine",
+    "trust_price": "Best Prices",
+    "trust_delivery": "Timely Delivery",
+    "brands_title": "Brands We Proudly Distribute",
+    "categories_title": "Shop by Category",
+    "categories_subtitle": "Everything your home and shop need, in one place",
+    "featured_title": "Featured Products",
+    "featured_subtitle": "Popular picks at the best prices",
+    "view_all": "View All Products",
     "about_title": "About Baidyanath Enterprise",
     "about_text": "Baidyanath Enterprise is a trusted distributor of FMCG, Healthcare & Cleaning Products based in Rampurhat, Birbhum, West Bengal. We supply genuine products at competitive prices with timely delivery. Our commitment to quality and customer satisfaction has made us a preferred choice for retailers and households alike.",
-    "about_owner": "Founded by Mrinal Kanti Pramanik",
-    "contact_title": "Get In Touch",
-    "contact_subtitle": "Visit our store or reach out to us",
-    "view_all": "View All Products"
+    "about_owner": "Mrinal Kanti Pramanik",
+    "about_owner_role": "Founder & Proprietor",
+    "why_title": "Why Choose Us",
+    "read_more": "Read More",
+    "contact_title": "Visit or Contact Us",
+    "contact_subtitle": "We're always happy to help with your orders",
+    "bulk_title": "Run a shop? Get wholesale rates.",
+    "bulk_text": "We supply retailers across Birbhum with genuine products, competitive distributor pricing and timely delivery. Send your requirement on WhatsApp for a quick quote.",
+    "bulk_cta": "Request Bulk Quote"
   },
   "products": {
     "title": "Our Products",
     "subtitle": "Browse our complete product catalog",
     "search": "Search products...",
-    "all_categories": "All Categories",
+    "all_categories": "All",
     "in_stock": "In Stock",
     "out_of_stock": "Out of Stock",
     "add_to_cart": "Add to Cart",
     "added": "Added!",
+    "order_whatsapp": "Order on WhatsApp",
+    "off": "OFF",
     "per_unit": "per {unit}",
     "no_products": "No products found",
+    "no_products_sub": "Try a different category or search term.",
+    "showing": "Showing {count} products",
     "filter_by": "Filter by Category",
     "related": "Related Products",
     "description": "Description",
@@ -44,11 +63,18 @@
     "mrp": "MRP"
   },
   "categories": {
-    "healthcare": "Healthcare",
-    "cleaning": "Cleaning",
-    "food": "Food & Nutrition",
-    "otc": "OTC Products",
-    "household": "Household"
+    "health-drinks": "Health Drinks & Nutrition",
+    "otc": "OTC & Healthcare",
+    "cleaning": "Cleaning & Disinfectants",
+    "household": "Household Essentials",
+    "food": "Food & Beverages"
+  },
+  "cat_desc": {
+    "health-drinks": "Complan, Glucon-D, Sugar Free & more",
+    "otc": "Everyday medicines & first-aid",
+    "cleaning": "Phenyl, bleaching powder, cleaners",
+    "household": "Naphthalene balls, fresheners & more",
+    "food": "Packaged food & beverages"
   },
   "cart": {
     "title": "Your Cart",
@@ -57,6 +83,7 @@
     "subtotal": "Subtotal",
     "total": "Total",
     "checkout": "Proceed to Checkout",
+    "order_whatsapp": "Order on WhatsApp",
     "remove": "Remove",
     "quantity": "Qty",
     "continue_shopping": "Continue Shopping",
@@ -143,6 +170,7 @@
     "hours_weekday": "Monday - Saturday: 9:00 AM - 6:00 PM",
     "hours_sunday": "Sunday: Closed",
     "find_us": "Find Us on Map",
+    "directions": "Get Directions",
     "whatsapp": "Chat on WhatsApp"
   },
   "admin": {
@@ -201,7 +229,10 @@
     "yes": "Yes",
     "no": "No",
     "rupee": "₹",
-    "business_name": "Baidyanath Enterprise"
+    "business_name": "Baidyanath Enterprise",
+    "call_now": "Call Now",
+    "whatsapp": "WhatsApp",
+    "back_to_top": "Back to top"
   },
   "footer": {
     "tagline": "Trusted Distributor of FMCG, Healthcare & Cleaning Products",

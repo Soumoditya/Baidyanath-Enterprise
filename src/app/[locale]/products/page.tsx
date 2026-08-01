@@ -6,10 +6,11 @@ import { useTranslations, useLocale } from "next-intl";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import ProductCard from "@/components/products/product-card";
-import AnimatedSection from "@/components/shared/animated-section";
+import ProductCardSkeleton from "@/components/products/product-card-skeleton";
+import CategoryIcon from "@/components/shared/category-icon";
 import { getProducts } from "@/lib/firebase/firestore";
 import { Product, CATEGORIES } from "@/types/product";
-import { getLocalizedName } from "@/lib/utils";
+import { getLocalizedName, cn } from "@/lib/utils";
 
 export default function ProductsPage() {
   const t = useTranslations("products");
@@ -21,9 +22,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(
-    categoryParam || ""
-  );
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam || "");
 
   useEffect(() => {
     getProducts()
@@ -37,13 +36,10 @@ export default function ProductsPage() {
   }, [categoryParam]);
 
   const filtered = products.filter((p) => {
-    const matchesCategory =
-      !selectedCategory || p.category === selectedCategory;
+    const matchesCategory = !selectedCategory || p.category === selectedCategory;
     const matchesSearch =
       !search ||
-      getLocalizedName(p.name, locale)
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      getLocalizedName(p.name, locale).toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -51,71 +47,90 @@ export default function ProductsPage() {
     <>
       <Header />
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <AnimatedSection>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+        {/* Page header band */}
+        <div className="border-b border-slate-200 bg-gradient-to-b from-primary-50 to-white dark:border-slate-800 dark:from-primary-950/40 dark:to-slate-900">
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
               {t("title")}
             </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">
+            <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
               {t("subtitle")}
             </p>
-          </AnimatedSection>
+          </div>
+        </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <div className="relative flex-1">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              <input
-                type="text"
-                placeholder={t("search")}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 text-base rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-              />
-            </div>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-3 text-base rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-            >
-              <option value="">{t("all_categories")}</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat.slug} value={cat.slug}>
-                  {cat.icon} {tc(cat.slug)}
-                </option>
-              ))}
-            </select>
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Search */}
+          <div className="relative mb-5">
+            <svg className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder={t("search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-slate-300 bg-white py-3.5 pl-11 pr-4 text-base text-slate-900 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+            />
           </div>
 
+          {/* Category chips */}
+          <div className="mb-8 flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory("")}
+              className={cn(
+                "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                !selectedCategory
+                  ? "bg-primary-600 text-white"
+                  : "border border-slate-300 bg-white text-slate-700 hover:border-primary-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+              )}
+            >
+              {t("all_categories")}
+            </button>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.slug}
+                onClick={() => setSelectedCategory(cat.slug)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                  selectedCategory === cat.slug
+                    ? "bg-primary-600 text-white"
+                    : "border border-slate-300 bg-white text-slate-700 hover:border-primary-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+                )}
+              >
+                <CategoryIcon slug={cat.slug} className="h-4 w-4" />
+                {tc(cat.slug)}
+              </button>
+            ))}
+          </div>
+
+          {/* Results */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-lg text-slate-500 dark:text-slate-400">
+            <div className="rounded-2xl border border-dashed border-slate-300 py-20 text-center dark:border-slate-700">
+              <p className="text-lg font-semibold text-slate-700 dark:text-slate-200">
                 {t("no_products")}
+              </p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                {t("no_products_sub")}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filtered.map((product) => (
-                <AnimatedSection key={product.id}>
-                  <ProductCard product={product} />
-                </AnimatedSection>
-              ))}
-            </div>
+            <>
+              <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
+                {t("showing", { count: filtered.length })}
+              </p>
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+                {filtered.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>
