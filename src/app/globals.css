@@ -18,20 +18,31 @@
   --font-sans: var(--font-inter);
   --font-bengali: var(--font-noto-bengali);
   --font-devanagari: var(--font-noto-devanagari);
+
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.06);
+  --shadow-lift: 0 10px 30px -12px rgb(37 99 235 / 0.28);
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
 }
 
 html {
   scroll-behavior: smooth;
+  /* Slightly larger base for comfortable reading by mid-age users */
+  font-size: 16.5px;
 }
 
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 html.dark {
   color-scheme: dark;
 }
 
+/* Locale-specific fonts */
 .locale-bn,
 .locale-bn input,
 .locale-bn textarea,
@@ -46,4 +57,78 @@ html.dark {
 .locale-hi select,
 .locale-hi button {
   font-family: var(--font-devanagari), var(--font-sans), system-ui, sans-serif;
+}
+
+/* ── Keyframes ── */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ── Utilities ── */
+
+/* Shimmer skeleton block */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(226 232 240) 25%,
+    rgb(241 245 249) 37%,
+    rgb(226 232 240) 63%
+  );
+  background-size: 800px 100%;
+  animation: var(--animate-shimmer);
+}
+.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(30 41 59) 25%,
+    rgb(51 65 85) 37%,
+    rgb(30 41 59) 63%
+  );
+  background-size: 800px 100%;
+}
+
+/* Subtle dotted grid backdrop for hero / feature sections */
+.bg-grid {
+  background-image: radial-gradient(
+    rgb(37 99 235 / 0.09) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+.dark .bg-grid {
+  background-image: radial-gradient(
+    rgb(96 165 250 / 0.10) 1px,
+    transparent 1px
+  );
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
