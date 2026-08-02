@@ -171,8 +171,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-10 border-t border-slate-200 pt-6 dark:border-slate-700">
+        {/* Copyright — extra bottom room so the floating WhatsApp/Call buttons
+            never sit on top of it. */}
+        <div className="mt-10 border-t border-slate-200 pb-20 pt-6 sm:pb-6 dark:border-slate-700">
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">
             {t("footer.copyright", { year: String(year) })}
           </p>

@@ -59,9 +59,9 @@ export default function AboutPage() {
               {values.map(({ key, icon }) => (
                 <div
                   key={key}
-                  className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+                  className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[var(--shadow-soft)] dark:border-slate-700 dark:bg-slate-800"
                 >
-                  <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
+                  <div className="mb-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900/30">
                     <svg
                       className="w-6 h-6 text-primary-600 dark:text-primary-400"
                       fill="none"

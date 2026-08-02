@@ -63,7 +63,7 @@ export default function AboutSection() {
                   key={v.key}
                   className="rounded-2xl border border-slate-200 bg-white p-5 transition-shadow hover:shadow-[var(--shadow-soft)] dark:border-slate-700 dark:bg-slate-800"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-900/40 dark:text-primary-300">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d={v.icon} /></svg>
                   </span>
                   <p className="mt-3 text-base font-bold text-slate-900 dark:text-white">

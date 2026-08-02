@@ -28,12 +28,17 @@
 
 html {
   scroll-behavior: smooth;
-  /* Slightly larger base for comfortable reading by mid-age users */
-  font-size: 16.5px;
 }
 
+/*
+ * Comfortable reading size for mid-age users, applied to body text only.
+ * Scaling the root font-size instead would rescale every rem-based utility
+ * (heights, paddings, icon sizes) and destabilise fixed layouts.
+ */
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

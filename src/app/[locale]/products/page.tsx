@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import Header from "@/components/layout/header";
@@ -15,21 +15,34 @@ import { getLocalizedName, cn } from "@/lib/utils";
 export default function ProductsPage() {
   const t = useTranslations("products");
   const tc = useTranslations("categories");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || "");
 
-  useEffect(() => {
-    getProducts()
-      .then(setProducts)
-      .catch(() => {})
-      .finally(() => setLoading(false));
+  // Distinguish "nothing matched" from "couldn't load" — a silent empty store
+  // on a flaky connection looks like the shop has no stock.
+  const load = useCallback(async () => {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      setProducts(await getProducts());
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   useEffect(() => {
     if (categoryParam) setSelectedCategory(categoryParam);
@@ -110,6 +123,21 @@ export default function ProductsPage() {
               {Array.from({ length: 8 }).map((_, i) => (
                 <ProductCardSkeleton key={i} />
               ))}
+            </div>
+          ) : loadError ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 py-16 text-center dark:border-red-900 dark:bg-red-900/20">
+              <p className="text-lg font-semibold text-red-800 dark:text-red-200">
+                {t("load_error")}
+              </p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-300">
+                {t("load_error_sub")}
+              </p>
+              <button
+                onClick={load}
+                className="mt-5 rounded-xl bg-primary-600 px-6 py-3 text-base font-bold text-white transition-colors hover:bg-primary-700"
+              >
+                {tCommon("retry")}
+              </button>
             </div>
           ) : filtered.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 py-20 text-center dark:border-slate-700">

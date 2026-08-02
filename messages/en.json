@@ -60,7 +60,9 @@
     "related": "Related Products",
     "description": "Description",
     "price": "Price",
-    "mrp": "MRP"
+    "mrp": "MRP",
+    "load_error": "Couldn't load products",
+    "load_error_sub": "Please check your internet connection and try again."
   },
   "categories": {
     "health-drinks": "Health Drinks & Nutrition",
@@ -119,7 +121,16 @@
     "track_order": "Track Your Order",
     "back_home": "Back to Home",
     "required": "This field is required",
-    "invalid_phone": "Please enter a valid 10-digit phone number"
+    "invalid_phone": "Please enter a valid 10-digit phone number",
+    "step_info": "Your Details",
+    "step_review": "Review",
+    "step_payment": "Payment",
+    "step_done": "Done",
+    "edit": "Edit",
+    "back": "Back",
+    "processing": "Processing...",
+    "order_failed": "Could not place your order. Please check your details and try again.",
+    "continue": "Continue"
   },
   "orders": {
     "title": "Track Your Orders",
@@ -138,7 +149,12 @@
     "status_received": "Payment Received",
     "status_processing": "Processing",
     "status_delivered": "Delivered",
-    "status_cancelled": "Cancelled"
+    "status_cancelled": "Cancelled",
+    "searching": "Searching...",
+    "invalid_phone": "Please enter a valid 10-digit phone number.",
+    "lookup_error": "Could not look up your orders. Please try again.",
+    "no_orders_sub": "Please check the phone number you used when ordering.",
+    "account_hint": "Have an account? See all your orders in one place —"
   },
   "about": {
     "title": "About Us",
@@ -207,6 +223,40 @@
     "customer": "Customer",
     "no_products": "No products yet. Add your first product!",
     "no_orders": "No orders yet."
+  },
+  "auth": {
+    "signin_title": "Sign In",
+    "signin_subtitle": "Access your orders and account",
+    "signup_title": "Create Account",
+    "signup_subtitle": "Save your details and track every order",
+    "full_name": "Full Name",
+    "email": "Email Address",
+    "password": "Password",
+    "password_hint": "At least 6 characters",
+    "signin": "Sign In",
+    "signing_in": "Signing in...",
+    "signup": "Create one",
+    "create_account": "Create Account",
+    "creating": "Creating account...",
+    "forgot_password": "Forgot password?",
+    "reset_sent": "Password reset link sent. Please check your email.",
+    "enter_email_first": "Please enter your email address first.",
+    "enter_name": "Please enter your name.",
+    "password_too_short": "Password must be at least 6 characters.",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "guest_hint": "You don't need an account to order — guest checkout is always available."
+  },
+  "account": {
+    "customer": "Customer",
+    "my_orders": "My Orders",
+    "no_orders": "You haven't placed any orders yet.",
+    "orders_error": "Could not load your orders. Please try again.",
+    "start_shopping": "Start Shopping",
+    "sign_out": "Sign Out",
+    "admin_panel": "Admin Panel",
+    "my_account": "My Account",
+    "sign_in": "Sign In"
   },
   "login": {
     "title": "Admin Login",
