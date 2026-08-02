@@ -8,6 +8,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import ProductCard from "@/components/products/product-card";
 import AnimatedSection from "@/components/shared/animated-section";
+import Skeleton from "@/components/ui/skeleton";
 import { getProductBySlug, getProducts } from "@/lib/firebase/firestore";
 import { Product } from "@/types/product";
 import { useCartStore } from "@/stores/cart-store";
@@ -51,16 +52,17 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!product || !product.inStock) return;
-    for (let i = 0; i < quantity; i++) {
-      addItem({
+    addItem(
+      {
         productId: product.id,
-        name: product.name.en,
+        name: getLocalizedName(product.name, locale),
         price: product.price,
         imageUrl: product.imageUrl,
         unit: product.unit,
         maxStock: product.inStock,
-      });
-    }
+      },
+      quantity
+    );
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
@@ -69,8 +71,17 @@ export default function ProductDetailPage() {
     return (
       <>
         <Header />
-        <main className="flex-1 flex items-center justify-center py-20">
-          <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+        <main className="flex-1">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
+            <Skeleton className="aspect-square w-full rounded-2xl" />
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-5 w-1/3" />
+              <Skeleton className="h-10 w-1/2" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-14 w-full rounded-xl" />
+            </div>
+          </div>
         </main>
         <Footer />
       </>
@@ -98,8 +109,31 @@ export default function ProductDetailPage() {
   const name = getLocalizedName(product.name, locale);
   const description = getLocalizedName(product.description, locale);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    ...(product.imageUrl ? { image: product.imageUrl } : {}),
+    ...(product.unit ? { size: product.unit } : {}),
+    brand: { "@type": "Brand", name: "Baidyanath Enterprise" },
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "INR",
+      availability: product.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: "Baidyanath Enterprise" },
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Header />
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -1,14 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 import { whatsappChatUrl, CALL_URL } from "@/lib/whatsapp";
 
-/** Persistent floating WhatsApp + Call buttons, shown on every page. */
+/** Persistent floating WhatsApp + Call buttons, shown on customer-facing pages. */
 export default function WhatsAppFab() {
   const t = useTranslations("common");
+  const pathname = usePathname();
+
+  // Admin has its own mobile bottom bar — these would sit on top of it.
+  if (pathname.startsWith("/admin")) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-4 right-4 z-30 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       {/* Call */}
       <a
         href={CALL_URL}

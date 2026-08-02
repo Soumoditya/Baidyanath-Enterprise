@@ -87,7 +87,7 @@ export default function HeroSection() {
           >
             {trustKeys.map((b) => (
               <li key={b.key} className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d={b.icon} /></svg>
                 </span>
                 {t(`trust_${b.key}`)}

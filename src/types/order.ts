@@ -21,6 +21,8 @@ export interface Order {
   customerPhone: string;
   customerEmail?: string;
   customerAddress: string;
+  /** Set when the order was placed by a signed-in customer. */
+  userId?: string;
   items: OrderItem[];
   subtotal: number;
   total: number;

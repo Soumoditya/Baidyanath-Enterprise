@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCartStore } from "@/stores/cart-store";
+import { useAuth } from "@/hooks/use-auth";
 import { formatPrice, cn } from "@/lib/utils";
 import { createOrder } from "@/lib/firebase/firestore";
 import { generateUpiLink, getUpiId } from "@/lib/upi/generate";
@@ -28,12 +29,13 @@ interface FormErrors {
   address?: string;
 }
 
-const STEP_LABELS = ["Customer Info", "Review Order", "Payment", "Confirmation"];
+const STEP_KEYS = ["step_info", "step_review", "step_payment", "step_done"] as const;
 
 export default function CheckoutForm() {
   const t = useTranslations("checkout");
   const tc = useTranslations("cart");
   const { items, getTotal, clearCart } = useCartStore();
+  const { user } = useAuth();
 
   const [step, setStep] = useState<Step>(1);
   const [formData, setFormData] = useState<FormData>({
@@ -45,8 +47,19 @@ export default function CheckoutForm() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
   const [orderRef, setOrderRef] = useState<Order | null>(null);
+
+  // Prefill from the signed-in account (guest checkout stays the default).
+  useEffect(() => {
+    if (!user) return;
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || user.displayName || "",
+      email: prev.email || user.email || "",
+    }));
+  }, [user]);
 
   const subtotal = getTotal();
   const total = subtotal;
@@ -91,6 +104,7 @@ export default function CheckoutForm() {
   const handlePlaceOrder = async () => {
     if (isSubmitting || items.length === 0) return;
     setIsSubmitting(true);
+    setSubmitError("");
 
     try {
       const orderItems = items.map((item) => ({
@@ -102,36 +116,31 @@ export default function CheckoutForm() {
         unit: item.unit,
       }));
 
-      const newOrderNumber = await createOrder({
+      // Use "" rather than undefined — Firestore rejects undefined values and
+      // would abort the whole write whenever an optional field is left blank.
+      const orderPayload = {
         customerName: formData.name.trim(),
         customerPhone: formData.phone.trim(),
-        customerEmail: formData.email.trim() || undefined,
+        customerEmail: formData.email.trim(),
         customerAddress: formData.address.trim(),
+        userId: user?.uid ?? "",
         items: orderItems,
         subtotal,
         total,
-        status: "pending_payment",
-        notes: formData.notes.trim() || undefined,
-      });
+        status: "pending_payment" as const,
+        notes: formData.notes.trim(),
+      };
+
+      const newOrderNumber = await createOrder(orderPayload);
 
       setOrderNumber(newOrderNumber);
-
-      const order: Order = {
+      setOrderRef({
+        ...orderPayload,
         id: "",
         orderNumber: newOrderNumber,
-        customerName: formData.name.trim(),
-        customerPhone: formData.phone.trim(),
-        customerEmail: formData.email.trim() || undefined,
-        customerAddress: formData.address.trim(),
-        items: orderItems,
-        subtotal,
-        total,
-        status: "pending_payment",
-        notes: formData.notes.trim() || undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-      };
-      setOrderRef(order);
+      });
 
       const itemsSummary = items
         .map((i) => `${i.name} x${i.quantity} - ${formatPrice(i.price * i.quantity)}`)
@@ -154,7 +163,9 @@ export default function CheckoutForm() {
       setStep(3);
     } catch (error) {
       console.error("Failed to create order:", error);
-      alert("Failed to place order. Please try again.");
+      const detail =
+        error instanceof Error && error.message ? ` (${error.message})` : "";
+      setSubmitError(`${t("order_failed")}${detail}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -211,13 +222,14 @@ export default function CheckoutForm() {
       {step < 4 && (
         <div className="mb-8">
           <div className="flex items-center justify-between">
-            {STEP_LABELS.map((label, i) => {
+            {STEP_KEYS.map((labelKey, i) => {
+              const label = t(labelKey);
               const stepNum = (i + 1) as Step;
               const isActive = step === stepNum;
               const isCompleted = step > stepNum;
 
               return (
-                <div key={label} className="flex flex-1 items-center">
+                <div key={labelKey} className="flex flex-1 items-center">
                   <div className="flex flex-col items-center">
                     <div
                       className={cn(
@@ -259,7 +271,7 @@ export default function CheckoutForm() {
                       {label}
                     </span>
                   </div>
-                  {i < STEP_LABELS.length - 1 && (
+                  {i < STEP_KEYS.length - 1 && (
                     <div
                       className={cn(
                         "mx-2 h-0.5 flex-1",
@@ -416,7 +428,7 @@ export default function CheckoutForm() {
             onClick={handleContinueToReview}
             className="mt-6 w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-primary-700"
           >
-            {t("order_summary")}
+            {t("continue")}
           </button>
         </div>
       )}
@@ -449,7 +461,7 @@ export default function CheckoutForm() {
               onClick={() => setStep(1)}
               className="mt-2 text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
             >
-              Edit
+              {t("edit")}
             </button>
           </div>
 
@@ -506,6 +518,13 @@ export default function CheckoutForm() {
             </div>
           </div>
 
+          {/* Submit error */}
+          {submitError && (
+            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-center text-base font-medium text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+              {submitError}
+            </div>
+          )}
+
           {/* Actions */}
           <div className="mt-6 flex flex-col gap-3">
             <button
@@ -540,7 +559,7 @@ export default function CheckoutForm() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                     />
                   </svg>
-                  Processing...
+                  {t("processing")}
                 </span>
               ) : (
                 t("place_order")
@@ -551,7 +570,7 @@ export default function CheckoutForm() {
               disabled={isSubmitting}
               className="w-full rounded-xl border border-slate-300 px-6 py-3 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
             >
-              Back
+              {t("back")}
             </button>
           </div>
         </div>

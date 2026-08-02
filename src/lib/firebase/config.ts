@@ -1,5 +1,5 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { initializeFirestore, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 // Firebase web config values are safe to ship to the client (security is enforced
@@ -20,7 +20,17 @@ const firebaseConfig = {
     "1:502554745917:web:ff2164c46229faf2da5e54",
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const isNew = getApps().length === 0;
+const app = isNew ? initializeApp(firebaseConfig) : getApp();
 
-export const db = getFirestore(app);
+/*
+ * Firestore's default WebChannel transport is often blocked or reset by
+ * restrictive mobile networks and proxies, leaving customers on an apparently
+ * empty store. Auto-detecting long-polling falls back to plain HTTP when that
+ * happens, which matters on patchy connections.
+ */
+export const db = isNew
+  ? initializeFirestore(app, { experimentalAutoDetectLongPolling: true })
+  : getFirestore(app);
+
 export const auth = getAuth(app);

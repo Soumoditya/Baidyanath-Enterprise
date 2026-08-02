@@ -55,7 +55,7 @@ export default function ContactSection() {
               key={c.key}
               className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-[var(--shadow-soft)] dark:border-slate-700 dark:bg-slate-800"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d={c.icon} /></svg>
               </span>
               <h3 className="mt-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">

@@ -8,6 +8,7 @@ import Logo from "@/components/layout/logo";
 import LanguageSwitcher from "@/components/layout/language-switcher";
 import ThemeToggle from "@/components/layout/theme-toggle";
 import MobileNav from "@/components/layout/mobile-nav";
+import AccountButton from "@/components/layout/account-button";
 import { CALL_URL } from "@/lib/whatsapp";
 
 const navLinks = [
@@ -84,6 +85,7 @@ export default function Header() {
           <div className="flex items-center gap-0.5 sm:gap-1">
             <LanguageSwitcher />
             <ThemeToggle />
+            <AccountButton />
 
             {/* Cart */}
             <Link

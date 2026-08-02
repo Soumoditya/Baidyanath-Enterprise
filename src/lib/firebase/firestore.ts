@@ -12,6 +12,8 @@ import {
   Timestamp,
   increment,
   setDoc,
+  type QueryDocumentSnapshot,
+  type DocumentData,
 } from "firebase/firestore";
 import { db } from "./config";
 import { Product } from "@/types/product";
@@ -21,6 +23,21 @@ function toDate(ts: unknown): Date {
   if (ts instanceof Timestamp) return ts.toDate();
   if (ts instanceof Date) return ts;
   return new Date();
+}
+
+/**
+ * Firestore rejects `undefined` field values outright. Optional fields left
+ * blank (email, notes, mrp, …) would otherwise abort the whole write, so drop
+ * them before sending.
+ */
+function stripUndefined<T extends Record<string, unknown>>(data: T): T {
+  return Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined)
+  ) as T;
+}
+
+function sortByCreatedAtDesc<T extends { createdAt: Date }>(rows: T[]): T[] {
+  return rows.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 // ── Products ──
@@ -103,7 +120,7 @@ export async function addProduct(
 ) {
   const now = Timestamp.now();
   return addDoc(collection(db, "products"), {
-    ...product,
+    ...stripUndefined(product),
     createdAt: now,
     updatedAt: now,
   });
@@ -114,7 +131,7 @@ export async function updateProduct(
   data: Partial<Omit<Product, "id" | "createdAt" | "updatedAt">>
 ) {
   return updateDoc(doc(db, "products", id), {
-    ...data,
+    ...stripUndefined(data),
     updatedAt: Timestamp.now(),
   });
 }
@@ -142,8 +159,8 @@ export async function createOrder(
   const count = counterSnap.data()?.count || 1;
   const orderNumber = `BE-${dateStr}-${String(count).padStart(3, "0")}`;
 
-  const docRef = await addDoc(collection(db, "orders"), {
-    ...order,
+  await addDoc(collection(db, "orders"), {
+    ...stripUndefined(order),
     orderNumber,
     createdAt: now,
     updatedAt: now,
@@ -155,56 +172,10 @@ export async function createOrder(
 export async function getOrders(): Promise<Order[]> {
   const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => {
-    const data = d.data();
-    return {
-      id: d.id,
-      orderNumber: data.orderNumber,
-      customerName: data.customerName,
-      customerPhone: data.customerPhone,
-      customerEmail: data.customerEmail,
-      customerAddress: data.customerAddress,
-      items: data.items,
-      subtotal: data.subtotal,
-      total: data.total,
-      status: data.status,
-      notes: data.notes,
-      createdAt: toDate(data.createdAt),
-      updatedAt: toDate(data.updatedAt),
-    } as Order;
-  });
+  return snapshot.docs.map(mapOrder);
 }
 
-export async function getOrdersByPhone(phone: string): Promise<Order[]> {
-  const q = query(
-    collection(db, "orders"),
-    where("customerPhone", "==", phone),
-    orderBy("createdAt", "desc")
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => {
-    const data = d.data();
-    return {
-      id: d.id,
-      orderNumber: data.orderNumber,
-      customerName: data.customerName,
-      customerPhone: data.customerPhone,
-      customerEmail: data.customerEmail,
-      customerAddress: data.customerAddress,
-      items: data.items,
-      subtotal: data.subtotal,
-      total: data.total,
-      status: data.status,
-      notes: data.notes,
-      createdAt: toDate(data.createdAt),
-      updatedAt: toDate(data.updatedAt),
-    } as Order;
-  });
-}
-
-export async function getOrderById(id: string): Promise<Order | null> {
-  const d = await getDoc(doc(db, "orders", id));
-  if (!d.exists()) return null;
+function mapOrder(d: QueryDocumentSnapshot<DocumentData>): Order {
   const data = d.data();
   return {
     id: d.id,
@@ -213,6 +184,7 @@ export async function getOrderById(id: string): Promise<Order | null> {
     customerPhone: data.customerPhone,
     customerEmail: data.customerEmail,
     customerAddress: data.customerAddress,
+    userId: data.userId,
     items: data.items,
     subtotal: data.subtotal,
     total: data.total,
@@ -221,6 +193,26 @@ export async function getOrderById(id: string): Promise<Order | null> {
     createdAt: toDate(data.createdAt),
     updatedAt: toDate(data.updatedAt),
   } as Order;
+}
+
+// NOTE: deliberately no `orderBy` here — combining it with `where` would need a
+// composite index. Sorting client-side keeps lookups working with zero setup.
+export async function getOrdersByPhone(phone: string): Promise<Order[]> {
+  const q = query(collection(db, "orders"), where("customerPhone", "==", phone));
+  const snapshot = await getDocs(q);
+  return sortByCreatedAtDesc(snapshot.docs.map(mapOrder));
+}
+
+export async function getOrdersByUser(userId: string): Promise<Order[]> {
+  const q = query(collection(db, "orders"), where("userId", "==", userId));
+  const snapshot = await getDocs(q);
+  return sortByCreatedAtDesc(snapshot.docs.map(mapOrder));
+}
+
+export async function getOrderById(id: string): Promise<Order | null> {
+  const d = await getDoc(doc(db, "orders", id));
+  if (!d.exists()) return null;
+  return mapOrder(d as QueryDocumentSnapshot<DocumentData>);
 }
 
 export async function updateOrderStatus(id: string, status: OrderStatus) {
