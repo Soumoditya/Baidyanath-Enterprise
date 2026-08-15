@@ -39,7 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800">
+    <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] dark:border-slate-700 dark:bg-slate-800">
       {/* Image */}
       <Link
         href={`/products/${product.slug}`}

@@ -3,6 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  /* Primary — trust blue */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
@@ -15,15 +16,41 @@
   --color-primary-900: #1e3a8a;
   --color-primary-950: #172554;
 
+  /* Accent — saffron/amber (genuine, premium, "open now", savings) */
+  --color-accent-50: #fff8eb;
+  --color-accent-100: #feefc7;
+  --color-accent-200: #fddd8a;
+  --color-accent-300: #fbc44d;
+  --color-accent-400: #f9ab23;
+  --color-accent-500: #f38b0a;
+  --color-accent-600: #d86c05;
+  --color-accent-700: #b34e08;
+  --color-accent-800: #913d0e;
+  --color-accent-900: #78330f;
+  --color-accent-950: #451803;
+
+  /* Deep-ink surfaces for dark mode (warmer than flat slate) */
+  --color-ink-900: #0b1120;
+  --color-ink-850: #0f172a;
+  --color-ink-800: #131c31;
+  --color-ink-700: #1e293b;
+
   --font-sans: var(--font-inter);
+  --font-display: var(--font-display);
   --font-bengali: var(--font-noto-bengali);
   --font-devanagari: var(--font-noto-devanagari);
 
+  /* Layered depth */
   --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.06);
-  --shadow-lift: 0 10px 30px -12px rgb(37 99 235 / 0.28);
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 8px 24px -8px rgb(15 23 42 / 0.10);
+  --shadow-lift: 0 18px 40px -18px rgb(37 99 235 / 0.35);
+  --shadow-glow: 0 0 0 1px rgb(37 99 235 / 0.08), 0 20px 50px -20px rgb(37 99 235 / 0.30);
+
+  --radius-xl2: 1.25rem;
 
   --animate-shimmer: shimmer 1.6s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
 }
 
 html {
@@ -32,8 +59,8 @@ html {
 
 /*
  * Comfortable reading size for mid-age users, applied to body text only.
- * Scaling the root font-size instead would rescale every rem-based utility
- * (heights, paddings, icon sizes) and destabilise fixed layouts.
+ * Scaling the root font-size would rescale every rem-based utility and
+ * destabilise fixed layouts.
  */
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -47,8 +74,17 @@ html.dark {
   color-scheme: dark;
 }
 
-/* Locale-specific fonts */
+/* Display font for headings (English). Utility class so we opt in deliberately. */
+.font-display {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Locale-specific fonts — Bengali/Hindi (incl. their headings) fall back to Noto,
+   which carries the glyphs the display face lacks. */
 .locale-bn,
+.locale-bn .font-display,
 .locale-bn input,
 .locale-bn textarea,
 .locale-bn select,
@@ -57,6 +93,7 @@ html.dark {
 }
 
 .locale-hi,
+.locale-hi .font-display,
 .locale-hi input,
 .locale-hi textarea,
 .locale-hi select,
@@ -66,65 +103,79 @@ html.dark {
 
 /* ── Keyframes ── */
 @keyframes shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }
-
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ── Utilities ── */
 
 /* Shimmer skeleton block */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    rgb(226 232 240) 25%,
-    rgb(241 245 249) 37%,
-    rgb(226 232 240) 63%
-  );
+  background: linear-gradient(90deg, rgb(226 232 240) 25%, rgb(241 245 249) 37%, rgb(226 232 240) 63%);
   background-size: 800px 100%;
   animation: var(--animate-shimmer);
 }
 .dark .skeleton {
-  background: linear-gradient(
-    90deg,
-    rgb(30 41 59) 25%,
-    rgb(51 65 85) 37%,
-    rgb(30 41 59) 63%
-  );
+  background: linear-gradient(90deg, rgb(30 41 59) 25%, rgb(51 65 85) 37%, rgb(30 41 59) 63%);
   background-size: 800px 100%;
 }
 
-/* Subtle dotted grid backdrop for hero / feature sections */
+/* Subtle dotted grid backdrop */
 .bg-grid {
-  background-image: radial-gradient(
-    rgb(37 99 235 / 0.09) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(rgb(37 99 235 / 0.09) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 .dark .bg-grid {
-  background-image: radial-gradient(
-    rgb(96 165 250 / 0.10) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(rgb(96 165 250 / 0.10) 1px, transparent 1px);
 }
 
-.text-balance {
-  text-wrap: balance;
+/* Gradient mesh accent — for hero / CTA bands. Layered radial blooms. */
+.bg-mesh {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(at 12% 8%, rgb(37 99 235 / 0.16) 0px, transparent 45%),
+    radial-gradient(at 88% 6%, rgb(249 171 35 / 0.14) 0px, transparent 42%),
+    radial-gradient(at 72% 92%, rgb(59 130 246 / 0.12) 0px, transparent 45%);
 }
+.dark .bg-mesh {
+  background-color: #0b1120;
+  background-image:
+    radial-gradient(at 12% 8%, rgb(37 99 235 / 0.26) 0px, transparent 45%),
+    radial-gradient(at 88% 6%, rgb(217 108 5 / 0.18) 0px, transparent 42%),
+    radial-gradient(at 72% 92%, rgb(59 130 246 / 0.18) 0px, transparent 45%);
+}
+
+/* Fine grain/noise overlay — add on a positioned ::before or a layer div */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Marquee track (duplicate children inside, set width to 200%) */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: var(--animate-marquee);
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
 
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
@@ -136,4 +187,5 @@ html.dark {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .marquee-track { animation: none !important; }
 }

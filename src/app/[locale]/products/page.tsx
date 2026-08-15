@@ -61,9 +61,9 @@ export default function ProductsPage() {
       <Header />
       <main className="flex-1">
         {/* Page header band */}
-        <div className="border-b border-slate-200 bg-gradient-to-b from-primary-50 to-white dark:border-slate-800 dark:from-primary-950/40 dark:to-slate-900">
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+        <div className="bg-mesh grain relative border-b border-slate-200/60 dark:border-slate-800">
+          <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <h1 className="font-display text-4xl text-slate-900 sm:text-5xl dark:text-white">
               {t("title")}
             </h1>
             <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
@@ -73,8 +73,10 @@ export default function ProductsPage() {
         </div>
 
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Sticky filter bar */}
+          <div className="sticky top-16 z-20 -mx-4 mb-8 space-y-4 border-b border-slate-200 bg-white/85 px-4 py-4 backdrop-blur-md sm:top-[6.25rem] dark:border-slate-800 dark:bg-ink-900/85">
           {/* Search */}
-          <div className="relative mb-5">
+          <div className="relative">
             <svg className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -88,7 +90,7 @@ export default function ProductsPage() {
           </div>
 
           {/* Category chips */}
-          <div className="mb-8 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedCategory("")}
               className={cn(
@@ -115,6 +117,7 @@ export default function ProductsPage() {
                 {tc(cat.slug)}
               </button>
             ))}
+          </div>
           </div>
 
           {/* Results */}

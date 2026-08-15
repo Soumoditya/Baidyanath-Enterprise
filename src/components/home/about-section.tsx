@@ -21,7 +21,7 @@ export default function AboutSection() {
         {/* Left: story + owner */}
         <AnimatedSection>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            <h2 className="font-display text-3xl text-slate-900 sm:text-4xl dark:text-white">
               {t("about_title")}
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
@@ -54,8 +54,7 @@ export default function AboutSection() {
         {/* Right: why choose us grid */}
         <AnimatedSection delay={0.1}>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-              {t("why_title")}
+            <h3 className="font-display text-xl text-slate-900 dark:text-white">{t("why_title")}
             </h3>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {values.map((v) => (

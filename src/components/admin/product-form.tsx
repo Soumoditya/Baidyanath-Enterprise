@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Product, CATEGORIES } from "@/types/product";
+import { Product, CATEGORIES, getCategoryLabel } from "@/types/product";
 import { addProduct, updateProduct } from "@/lib/firebase/firestore";
 import { slugify, cn } from "@/lib/utils";
 import ImageUploader from "@/components/admin/image-uploader";
@@ -10,14 +10,6 @@ interface ProductFormProps {
   product?: Product;
   onSaved: () => void;
 }
-
-const CATEGORY_LABELS: Record<string, string> = {
-  "health-drinks": "Health Drinks & Nutrition",
-  otc: "OTC & Healthcare",
-  cleaning: "Cleaning & Disinfectants",
-  household: "Household Essentials",
-  food: "Food & Beverages",
-};
 
 export default function ProductForm({ product, onSaved }: ProductFormProps) {
   const isEditing = !!product;
@@ -313,7 +305,7 @@ export default function ProductForm({ product, onSaved }: ProductFormProps) {
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat.slug} value={cat.slug}>
-                  {cat.icon} {CATEGORY_LABELS[cat.slug] || cat.slug}
+                  {getCategoryLabel(cat.slug)}
                 </option>
               ))}
             </select>

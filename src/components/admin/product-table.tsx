@@ -3,22 +3,44 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Product, CATEGORIES } from "@/types/product";
+import { Product, CATEGORIES, getCategoryLabel } from "@/types/product";
 import { formatPrice, cn } from "@/lib/utils";
 
 interface ProductTableProps {
   products: Product[];
   onDelete: (id: string) => void;
   onRefresh: () => void;
+  onToggleStock?: (id: string, inStock: boolean) => void;
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  healthcare: "Healthcare",
-  cleaning: "Cleaning",
-  food: "Food & Beverages",
-  otc: "OTC Medicine",
-  household: "Household",
-};
+function StockToggle({
+  inStock,
+  onChange,
+}: {
+  inStock: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={inStock}
+      onClick={() => onChange(!inStock)}
+      className={cn(
+        "relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-800",
+        inStock ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"
+      )}
+      title={inStock ? "In stock — tap to mark out of stock" : "Out of stock — tap to mark in stock"}
+    >
+      <span
+        className={cn(
+          "inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
+          inStock ? "translate-x-6" : "translate-x-1"
+        )}
+      />
+    </button>
+  );
+}
 
 function getCategoryIcon(slug: string): string {
   const cat = CATEGORIES.find((c) => c.slug === slug);
@@ -29,6 +51,7 @@ export default function ProductTable({
   products,
   onDelete,
   onRefresh,
+  onToggleStock,
 }: ProductTableProps) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -239,20 +262,32 @@ export default function ProductTable({
                 <td className="px-4 py-3">
                   <span className="inline-flex items-center gap-1 text-sm text-slate-600 dark:text-slate-300">
                     {getCategoryIcon(product.category)}{" "}
-                    {CATEGORY_LABELS[product.category] || product.category}
+                    {getCategoryLabel(product.category)}
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <span
-                    className={cn(
-                      "inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
-                      product.inStock
-                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
-                    )}
-                  >
-                    {product.inStock ? "In Stock" : "Out of Stock"}
-                  </span>
+                  {onToggleStock ? (
+                    <div className="flex items-center gap-2">
+                      <StockToggle
+                        inStock={product.inStock}
+                        onChange={(v) => onToggleStock(product.id, v)}
+                      />
+                      <span className={cn("text-xs font-semibold", product.inStock ? "text-green-600 dark:text-green-400" : "text-slate-400")}>
+                        {product.inStock ? "In stock" : "Out"}
+                      </span>
+                    </div>
+                  ) : (
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
+                        product.inStock
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                      )}
+                    >
+                      {product.inStock ? "In Stock" : "Out of Stock"}
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
@@ -328,7 +363,7 @@ export default function ProductTable({
                 <div className="mt-1 flex items-center gap-2">
                   <span className="text-sm text-slate-500 dark:text-slate-400">
                     {getCategoryIcon(product.category)}{" "}
-                    {CATEGORY_LABELS[product.category] || product.category}
+                    {getCategoryLabel(product.category)}
                   </span>
                   <span
                     className={cn(
@@ -343,6 +378,18 @@ export default function ProductTable({
                 </div>
               </div>
             </div>
+
+            {onToggleStock && (
+              <div className="mt-3 flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2.5 dark:bg-slate-700/50">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                  {product.inStock ? "In stock" : "Out of stock"}
+                </span>
+                <StockToggle
+                  inStock={product.inStock}
+                  onChange={(v) => onToggleStock(product.id, v)}
+                />
+              </div>
+            )}
 
             <div className="mt-3 flex gap-2">
               <Link
