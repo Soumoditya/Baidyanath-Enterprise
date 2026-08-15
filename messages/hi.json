@@ -39,7 +39,18 @@
     "contact_subtitle": "आपके ऑर्डर में मदद के लिए हम हमेशा तैयार हैं",
     "bulk_title": "दुकान चलाते हैं? थोक दरें पाएं।",
     "bulk_text": "हम बीरभूम भर के खुदरा विक्रेताओं को असली उत्पाद, प्रतिस्पर्धी थोक कीमतें और समय पर डिलीवरी देते हैं। तुरंत दर के लिए WhatsApp पर अपनी ज़रूरत भेजें।",
-    "bulk_cta": "थोक दर पूछें"
+    "bulk_cta": "थोक दर पूछें",
+    "serving": "रामपुरहाट और बीरभूम में सेवा",
+    "bento_quality_title": "100% असली स्टॉक",
+    "bento_quality_text": "अधिकृत ब्रांडों से प्राप्त",
+    "bento_deliver_title": "तेज़ स्थानीय डिलीवरी",
+    "bento_deliver_text": "दुकान और घर तक भरोसेमंद आपूर्ति",
+    "stat_products": "उत्पाद",
+    "stat_brands": "भरोसेमंद ब्रांड",
+    "stat_categories": "श्रेणियाँ",
+    "stat_support": "सहायता",
+    "view_hours": "समय देखें",
+    "quick_add": "जोड़ें"
   },
   "products": {
     "title": "हमारे उत्पाद",
@@ -187,7 +198,8 @@
     "hours_sunday": "रविवार: बंद",
     "find_us": "मानचित्र पर हमें खोजें",
     "directions": "दिशा-निर्देश पाएं",
-    "whatsapp": "WhatsApp पर चैट करें"
+    "whatsapp": "WhatsApp पर चैट करें",
+    "closed": "बंद"
   },
   "admin": {
     "dashboard": "डैशबोर्ड",

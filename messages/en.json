@@ -39,7 +39,18 @@
     "contact_subtitle": "We're always happy to help with your orders",
     "bulk_title": "Run a shop? Get wholesale rates.",
     "bulk_text": "We supply retailers across Birbhum with genuine products, competitive distributor pricing and timely delivery. Send your requirement on WhatsApp for a quick quote.",
-    "bulk_cta": "Request Bulk Quote"
+    "bulk_cta": "Request Bulk Quote",
+    "serving": "Serving Rampurhat & Birbhum",
+    "bento_quality_title": "100% Genuine Stock",
+    "bento_quality_text": "Sourced from authorized brands",
+    "bento_deliver_title": "Fast Local Delivery",
+    "bento_deliver_text": "Reliable supply to your shop & home",
+    "stat_products": "Products",
+    "stat_brands": "Trusted Brands",
+    "stat_categories": "Categories",
+    "stat_support": "Support",
+    "view_hours": "View timings",
+    "quick_add": "Add"
   },
   "products": {
     "title": "Our Products",
@@ -187,7 +198,8 @@
     "hours_sunday": "Sunday: Closed",
     "find_us": "Find Us on Map",
     "directions": "Get Directions",
-    "whatsapp": "Chat on WhatsApp"
+    "whatsapp": "Chat on WhatsApp",
+    "closed": "Closed"
   },
   "admin": {
     "dashboard": "Dashboard",

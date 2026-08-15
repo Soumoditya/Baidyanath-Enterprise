@@ -53,7 +53,7 @@ export default function Logo({ compact = false }: LogoProps) {
 
       {!compact && (
         <span className="flex min-w-0 flex-col leading-none">
-          <span className="truncate text-base font-extrabold tracking-tight text-slate-900 sm:text-[1.05rem] dark:text-white">
+          <span className="font-display truncate text-[1.05rem] text-slate-900 sm:text-lg dark:text-white">
             Baidyanath
           </span>
           <span className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400">

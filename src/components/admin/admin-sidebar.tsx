@@ -4,6 +4,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { signOut } from "@/lib/firebase/auth";
 import { cn } from "@/lib/utils";
 import { useRouter } from "@/i18n/navigation";
+import { LogoMark } from "@/components/layout/logo";
 
 const navItems = [
   {
@@ -91,13 +92,16 @@ export default function AdminSidebar() {
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 border-r border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 lg:flex lg:flex-col">
         {/* Header */}
-        <div className="flex h-16 items-center border-b border-slate-200 px-6 dark:border-slate-700">
-          <Link
-            href="/admin"
-            className="text-lg font-bold text-primary-600 dark:text-primary-400"
-          >
-            Admin Panel
-          </Link>
+        <div className="flex h-16 items-center gap-2.5 border-b border-slate-200 px-5 dark:border-slate-700">
+          <LogoMark className="h-9 w-9" />
+          <div className="leading-none">
+            <span className="font-display block text-[15px] text-slate-900 dark:text-white">
+              Baidyanath
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-primary-600 dark:text-primary-400">
+              Admin
+            </span>
+          </div>
         </div>
 
         {/* Nav links */}

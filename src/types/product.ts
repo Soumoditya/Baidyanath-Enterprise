@@ -43,3 +43,18 @@ export const CATEGORIES = [
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]["slug"];
+
+// Single source of truth for English category labels (admin/back-office, which
+// is not translated). Import everywhere instead of redefining, so labels can
+// never drift out of sync with the slugs again.
+export const CATEGORY_LABELS: Record<string, string> = {
+  "health-drinks": "Health Drinks & Nutrition",
+  otc: "OTC & Healthcare",
+  cleaning: "Cleaning & Disinfectants",
+  household: "Household Essentials",
+  food: "Food & Beverages",
+};
+
+export function getCategoryLabel(slug: string): string {
+  return CATEGORY_LABELS[slug] ?? slug;
+}

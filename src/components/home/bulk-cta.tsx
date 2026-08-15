@@ -14,7 +14,7 @@ export default function BulkCta() {
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 to-primary-800 px-6 py-10 text-center shadow-[var(--shadow-lift)] sm:px-12 sm:py-12">
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
           <div className="relative mx-auto max-w-2xl">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+            <h2 className="font-display text-2xl text-white sm:text-3xl">
               {t("bulk_title")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-primary-100">
